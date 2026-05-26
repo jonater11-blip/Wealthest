@@ -2,9 +2,15 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FinExam">
+<meta name="theme-color" content="#08080C">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2308080C'/><text y='.9em' font-size='72' x='12'>📋</text></svg>">
+<link rel="manifest" href="data:application/json,%7B%22name%22%3A%22FinExam%22%2C%22short_name%22%3A%22FinExam%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%2308080C%22%2C%22theme_color%22%3A%22%2308080C%22%7D">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>FinExam — Educación Financiera</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -15,7 +21,7 @@
   --red:#FF5A5A;--red-l:rgba(255,90,90,0.1);
   --amber:#F5A623;--amber-l:rgba(245,166,35,0.1);
   --blue:#5B9EF5;--blue-l:rgba(91,158,245,0.1);
-  --font-d:'Fraunces',serif;--font-b:'Plus Jakarta Sans',sans-serif;
+  --font-d:Arial,sans-serif;--font-b:Arial,sans-serif;
   --r:16px;--r-sm:10px;--tab-h:70px;
 }
 html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--font-b);overflow:hidden;}
@@ -27,7 +33,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--
 
 /* ====== HOME ====== */
 .home-header{padding:24px 20px 0;}
-.home-title{font-family:var(--font-d);font-size:28px;font-style:italic;line-height:1.2;}
+.home-title{font-family:Arial,sans-serif;font-size:28px;line-height:1.2;}
 .home-title span{color:var(--purple);}
 .home-sub{font-size:13px;color:var(--muted);margin-top:4px;}
 
@@ -75,7 +81,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--
 /* LEADERBOARD / STATS */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px;}
 .stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px;text-align:center;}
-.stat-num{font-family:var(--font-d);font-size:26px;font-style:italic;margin-bottom:3px;}
+.stat-num{font-family:Arial,sans-serif;font-size:26px;margin-bottom:3px;}
 .stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
 
 /* ====== EXAM SCREEN ====== */
@@ -93,7 +99,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--
 .timer-wrap{display:flex;align-items:center;gap:10px;}
 .timer-bar{flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;}
 .timer-fill{height:100%;border-radius:3px;transition:width 0.1s linear,background 0.3s;}
-.timer-num{font-family:var(--font-d);font-size:18px;font-style:italic;min-width:36px;text-align:right;}
+.timer-num{font-family:Arial,sans-serif;font-size:18px;min-width:36px;text-align:right;}
 
 /* PROGRESS */
 .exam-progress{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted);}
@@ -110,7 +116,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--
 .q-type-tag{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
 .q-type-icon{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;}
 .q-num{font-size:11px;color:var(--muted);margin-bottom:6px;}
-.q-text{font-family:var(--font-d);font-size:20px;font-style:italic;line-height:1.4;margin-bottom:6px;}
+.q-text{font-family:Arial,sans-serif;font-size:20px;line-height:1.4;margin-bottom:6px;}
 .q-context{font-size:13px;color:rgba(240,238,255,0.6);line-height:1.6;margin-bottom:16px;background:var(--bg3);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px;}
 
 /* MULTIPLE CHOICE */
@@ -187,7 +193,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--
   border-bottom:1px solid var(--border);text-align:center;
 }
 .results-emoji{font-size:64px;margin-bottom:10px;}
-.results-grade{font-family:var(--font-d);font-size:72px;font-style:italic;line-height:1;}
+.results-grade{font-family:Arial,sans-serif;font-size:72px;line-height:1;}
 .results-label{font-size:16px;font-weight:800;margin-bottom:4px;}
 .results-sub{font-size:13px;color:rgba(255,255,255,0.5);}
 .results-pass{color:var(--green);}
@@ -222,7 +228,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--
 /* ====== PROGRESS PAGE ====== */
 .progress-content{padding:20px;}
 .prog-hero{background:linear-gradient(135deg,#1A1040,#0A0620);border:1px solid rgba(124,110,250,0.2);border-radius:var(--r);padding:20px;margin-bottom:16px;text-align:center;}
-.ph-level{font-family:var(--font-d);font-size:52px;font-style:italic;color:var(--purple);}
+.ph-level{font-family:Arial,sans-serif;font-size:52px;color:var(--purple);}
 .ph-name{font-size:15px;font-weight:800;margin-bottom:8px;}
 .ph-bar{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden;margin:8px 0;}
 .ph-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:4px;transition:width 0.7s;}
@@ -252,7 +258,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--
 .xp-pop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:linear-gradient(135deg,var(--purple),var(--blue));border-radius:20px;padding:24px 32px;text-align:center;z-index:600;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
 .xp-pop.show{transform:translate(-50%,-50%) scale(1);}
 .xp-pop-icon{font-size:40px;margin-bottom:6px;}
-.xp-pop-txt{font-family:var(--font-d);font-size:22px;font-style:italic;color:white;}
+.xp-pop-txt{font-family:Arial,sans-serif;font-size:22px;color:white;}
 .xp-pop-pts{font-size:14px;color:rgba(255,255,255,0.65);margin-top:4px;}
 </style>
 </head>
@@ -321,6 +327,16 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--
       </div>
     </div>
 
+
+    <!-- DATOS INTERESANTES -->
+    <div class="page" id="page-datos">
+      <div class="home-header" style="padding-bottom:12px;">
+        <div class="home-title" style="font-size:24px;">Datos <span style="color:var(--purple);">interesantes</span></div>
+        <div class="home-sub">Aprende más sobre finanzas personales</div>
+      </div>
+      <div id="datosContent" style="padding:0 20px 20px;"></div>
+    </div>
+
   </div>
 
   <!-- TAB BAR -->
@@ -328,6 +344,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--
     <button class="tab-btn active" data-page="home" onclick="goTo('home',this)"><div class="tab-icon">📋</div><div class="tab-label">Exámenes</div></button>
     <button class="tab-btn" data-page="review" onclick="goTo('review',this)"><div class="tab-icon">📖</div><div class="tab-label">Repasar</div></button>
     <button class="tab-btn" data-page="progress" onclick="goTo('progress',this)"><div class="tab-icon">🏆</div><div class="tab-label">Progreso</div></button>
+    <button class="tab-btn" data-page="datos" onclick="goTo('datos',this)"><div class="tab-icon">💡</div><div class="tab-label">Datos</div></button>
   </div>
 </div>
 
@@ -369,6 +386,7 @@ html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--
     <div class="review-list" id="resReview"></div>
     <div class="results-actions">
       <button class="btn-primary" id="resPrimaryBtn" onclick="retakeExam()">Repetir examen</button>
+      <button class="btn-primary" id="resNextBtn" style="display:none;background:var(--green);margin-top:0;" onclick="goNextSubject()">Continuar con el siguiente tema →</button>
       <button class="btn-secondary" onclick="closeResults()">Volver al inicio</button>
     </div>
   </div>
@@ -384,9 +402,9 @@ const SUBJECTS = [
     id:'presupuesto', name:'Presupuesto Personal', icon:'💰',
     color:'#3DDC84', bg:'rgba(61,220,132,0.1)',
     desc:'Controla tu dinero antes de que él te controle',
-    timePerQ:30, passingScore:70,
+    timePerQ:60, passingScore:70,
     study:`
-      <h3 style="font-family:var(--font-d);font-size:20px;font-style:italic;margin-bottom:12px;">Presupuesto Personal</h3>
+      <h3 style="font-family:Arial,sans-serif;font-size:20px;margin-bottom:12px;">Presupuesto Personal</h3>
       <p style="font-size:13px;color:rgba(240,238,255,0.75);line-height:1.8;margin-bottom:12px;">Un presupuesto es un plan que le dice a tu dinero exactamente adónde ir cada mes.</p>
       <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
         <div style="font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📊 Regla 50/30/20</div>
@@ -413,9 +431,9 @@ const SUBJECTS = [
     id:'deuda', name:'Deuda e Intereses', icon:'🔗',
     color:'#FF5A5A', bg:'rgba(255,90,90,0.1)',
     desc:'Entiende cómo funciona la deuda y cómo dominarla',
-    timePerQ:35, passingScore:70,
+    timePerQ:60, passingScore:70,
     study:`
-      <h3 style="font-family:var(--font-d);font-size:20px;font-style:italic;margin-bottom:12px;">Deuda e Intereses</h3>
+      <h3 style="font-family:Arial,sans-serif;font-size:20px;margin-bottom:12px;">Deuda e Intereses</h3>
       <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
         <div style="font-size:10px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">💳 Tipos de deuda</div>
         <div style="font-size:13px;line-height:1.8;color:rgba(240,238,255,0.75);">• <b style="color:var(--white)">Buena:</b> genera valor (hipoteca, educación)<br>• <b style="color:var(--white)">Mala:</b> financia consumo (tarjetas, préstamos de consumo)</div>
@@ -445,9 +463,9 @@ const SUBJECTS = [
     id:'inversion', name:'Inversión y Ahorro', icon:'📈',
     color:'#7C6EFA', bg:'rgba(124,110,250,0.1)',
     desc:'Haz que tu dinero trabaje para ti',
-    timePerQ:35, passingScore:70,
+    timePerQ:60, passingScore:70,
     study:`
-      <h3 style="font-family:var(--font-d);font-size:20px;font-style:italic;margin-bottom:12px;">Inversión y Ahorro</h3>
+      <h3 style="font-family:Arial,sans-serif;font-size:20px;margin-bottom:12px;">Inversión y Ahorro</h3>
       <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
         <div style="font-size:10px;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🇲🇽 Opciones en México</div>
         <div style="font-size:13px;line-height:1.8;color:rgba(240,238,255,0.75);">• <b style="color:var(--white)">CETES:</b> desde $100, ~11% anual, gobierno federal<br>• <b style="color:var(--white)">Nu Cuenta:</b> ~15% anual, liquidez inmediata<br>• <b style="color:var(--white)">GBM+ / Kuspit:</b> ETFs y acciones desde poco<br>• <b style="color:var(--white)">Afore:</b> retiro, fondos de largo plazo</div>
@@ -460,7 +478,7 @@ const SUBJECTS = [
       {type:'mc',q:'¿Por qué es necesario invertir y no solo guardar el dinero?',opts:['Para presumir que inviertes','Porque la inflación reduce el valor del dinero parado','Porque los bancos lo exigen','No es necesario, guardar es suficiente'],correct:1,exp:'La inflación en México (~5% anual) hace que el dinero parado pierda poder adquisitivo. $10,000 hoy comprarán menos en 10 años si no generan rendimiento.'},
       {type:'tf',q:'CETES son instrumentos de inversión respaldados por el gobierno federal mexicano.',correct:true,exp:'Verdadero. CETES (Certificados de la Tesorería) son emitidos por el gobierno federal, siendo el emisor más confiable de México.'},
       {type:'mc',q:'¿Qué son los ETFs?',opts:['Tarjetas de débito especiales','Fondos que replican un índice del mercado','Cuentas de ahorro bancarias','Préstamos de inversión'],correct:1,exp:'Los ETFs (Exchange-Traded Funds) son fondos que replican índices como el S&P 500. Permiten diversificación a bajo costo desde pocas decenas de pesos.'},
-      {type:'fill',q:'La diversificación significa no poner todos los huevos en un solo ____.',answer:'canasta',hint:'Objeto donde se guardan huevos',exp:'Diversificar es distribuir tu dinero en diferentes instrumentos para reducir el riesgo. Si uno baja, los otros pueden compensar.'},
+      {type:'fill',q:'La diversificación significa no poner todos los huevos en una sola ____.',answer:'canasta',hint:'Es donde se guardan los huevos',exp:'Diversificar es distribuir tu dinero en diferentes instrumentos para reducir el riesgo. Si uno baja, los otros pueden compensar.'},
       {type:'mc',q:'¿Cuál instrumento tiene mejor rendimiento pero también más riesgo?',opts:['CETES','Cuenta de ahorros bancaria','Acciones de bolsa','Cuenta de nómina'],correct:2,exp:'Las acciones históricamente dan los mejores rendimientos a largo plazo (~10-12% anual), pero pueden bajar significativamente en el corto plazo.'},
       {type:'case',q:'Decisión de inversión para Laura',context:'Laura tiene $50,000 ahorrados y quiere invertirlos. Necesita $20,000 disponibles en 6 meses para una emergencia, y el resto no lo necesita en al menos 5 años.',numbers:[{l:'Total ahorrado',v:'$50,000'},{l:'Para emergencia',v:'$20,000 (6 meses)'},{l:'Largo plazo',v:'$30,000 (5+ años)'}],opts:['Todo a CETES a 1 año','$20,000 en cuenta líquida + $30,000 en ETFs','Todo en acciones para máximo rendimiento','Todo en cuenta de ahorros bancaria'],correct:1,exp:'Correcta diversificación por horizonte temporal: liquidez para la emergencia, y ETFs para el largo plazo donde el tiempo permite asumir más riesgo.'},
       {type:'tf',q:'Es mejor esperar a tener mucho dinero para comenzar a invertir.',correct:false,exp:'Falso. El tiempo en el mercado es más valioso que el monto. Invertir $500/mes durante 30 años genera más que invertir $5,000/mes durante 10 años.'},
@@ -473,9 +491,9 @@ const SUBJECTS = [
     id:'interes_compuesto', name:'Interés Compuesto', icon:'🚀',
     color:'#F5A623', bg:'rgba(245,166,35,0.1)',
     desc:'La octava maravilla del mundo según Einstein',
-    timePerQ:40, passingScore:75,
+    timePerQ:60, passingScore:75,
     study:`
-      <h3 style="font-family:var(--font-d);font-size:20px;font-style:italic;margin-bottom:12px;">Interés Compuesto</h3>
+      <h3 style="font-family:Arial,sans-serif;font-size:20px;margin-bottom:12px;">Interés Compuesto</h3>
       <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
         <div style="font-size:10px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🧮 Fórmula básica</div>
         <div style="font-size:14px;text-align:center;font-weight:800;color:var(--white);padding:10px;background:var(--bg4);border-radius:8px;margin-bottom:8px;">A = P × (1 + r)ⁿ</div>
@@ -502,9 +520,9 @@ const SUBJECTS = [
     id:'libertad', name:'Libertad Financiera', icon:'🦅',
     color:'#2DD4BF', bg:'rgba(45,212,191,0.1)',
     desc:'Diseña la vida que quieres con tus finanzas',
-    timePerQ:40, passingScore:75,
+    timePerQ:60, passingScore:75,
     study:`
-      <h3 style="font-family:var(--font-d);font-size:20px;font-style:italic;margin-bottom:12px;">Libertad Financiera</h3>
+      <h3 style="font-family:Arial,sans-serif;font-size:20px;margin-bottom:12px;">Libertad Financiera</h3>
       <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
         <div style="font-size:10px;font-weight:800;color:var(--teal,#2DD4BF);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🎯 ¿Qué es?</div>
         <div style="font-size:13px;color:rgba(240,238,255,0.75);line-height:1.8;">Tener suficientes activos para que tus inversiones generen los ingresos necesarios para vivir, sin necesidad de trabajar activamente.</div>
@@ -836,6 +854,11 @@ function showResults(score,passed,xp){
   document.getElementById('resLabel').textContent=score===100?'¡Perfecto!':passed?'¡Aprobado!':score>=50?'Casi...':'A estudiar más';
   document.getElementById('resSub').textContent=`${exam.score} de ${total} correctas · Mínimo: ${exam.subject.passingScore}%`;
   document.getElementById('resPrimaryBtn').textContent=passed?'Tomar de nuevo':'Reintentar examen';
+  const ids=SUBJECTS.map(s=>s.id);
+  const curIdx=ids.indexOf(exam.subject.id);
+  const hasNext=curIdx<SUBJECTS.length-1&&passed;
+  const nextBtn=document.getElementById('resNextBtn');
+  if(nextBtn)nextBtn.style.display=hasNext?'block':'none';
 
   document.getElementById('resBreakdown').innerHTML=[
     {icon:'✓',text:'Respuestas correctas',sub:`${exam.score} de ${total}`,val:exam.score,cls:'g'},
@@ -869,7 +892,71 @@ function renderAll(){
   if(activePage==='home')renderHome();
   if(activePage==='review')renderReviewPage();
   if(activePage==='progress')renderProgressPage();
+  if(activePage==='datos')renderDatos();
   updateXPUI();
+}
+
+
+function goNextSubject(){
+  const ids=SUBJECTS.map(s=>s.id);
+  const cur=exam.subject.id;
+  const idx=ids.indexOf(cur);
+  const next=SUBJECTS[idx+1];
+  if(!next){showToast('¡Completaste todos los temas! 🏆');closeResults();return;}
+  closeResults();
+  setTimeout(()=>startExam(next.id),300);
+}
+
+
+const DATOS = [
+  {cat:'💰 Presupuesto', color:'var(--green)', items:[
+    {icon:'📊',title:'El 78% de los mexicanos vive al día',fact:'Según la ENIF 2021, casi 8 de cada 10 mexicanos no tienen ahorros formales. El presupuesto es la herramienta más poderosa para romper ese ciclo.'},
+    {icon:'☕',title:'El "Efecto Latte" es real',fact:'Gastar $80 diarios en café fuera equivale a $2,400 al mes — $28,800 al año. En 10 años, invertido al 10%, se convierte en $458,000.'},
+    {icon:'📱',title:'Las suscripciones ocultas',fact:'El mexicano promedio tiene 4-6 suscripciones activas que no usa regularmente. Revisarlas puede liberar $500-$1,500 al mes sin esfuerzo.'},
+    {icon:'🛒',title:'El truco del carrito abandonado',fact:'Esperar 48 horas antes de comprar algo no planeado elimina el 70% de esas compras por impulso, según estudios de comportamiento del consumidor.'},
+  ]},
+  {cat:'💳 Deuda e Intereses', color:'var(--red)', items:[
+    {icon:'📈',title:'La tasa más alta del mundo',fact:'Las tarjetas de crédito en México tienen tasas de hasta 60% anual — de las más altas del planeta. En promedio son 36%, según la CONDUSEF.'},
+    {icon:'💸',title:'El pago mínimo te atrapa',fact:'Pagando solo el mínimo de una deuda de $20,000 al 36% anual, terminarás pagando más de $48,000 y tardando 5+ años en liquidarla.'},
+    {icon:'🧮',title:'La regla de la tasa real',fact:'Si tu deuda tiene tasa del 36% anual y tu inversión rinde 11%, estás perdiendo 25% neto. Siempre paga primero la deuda más cara que lo que puedes ganar invirtiendo.'},
+    {icon:'⚡',title:'Un pago extra al año',fact:'Hacer un pago extra equivalente a una mensualidad al año puede reducir el tiempo de tu hipoteca en 4-7 años y ahorrarte cientos de miles en intereses.'},
+  ]},
+  {cat:'📈 Inversión', color:'var(--purple)', items:[
+    {icon:'🏦',title:'CETES: la inversión más segura de México',fact:'Los CETES son el instrumento más seguro porque están respaldados por el gobierno federal. Históricamente han rendido entre 8-15% anual y puedes empezar desde $100.'},
+    {icon:'🌍',title:'El S&P 500 en perspectiva',fact:'El índice S&P 500 de EE.UU. ha dado un rendimiento promedio de 10.5% anual durante 100 años, incluyendo todas las crisis. La paciencia supera al pánico.'},
+    {icon:'📉',title:'Los mercados siempre se recuperan',fact:'En cada crisis bursátil de la historia — 1929, 2008, 2020 — el mercado se recuperó y alcanzó nuevos máximos. El mayor error es vender en pánico.'},
+    {icon:'🎯',title:'Diversificación real',fact:'Un portafolio diversificado con ETFs globales puede dar rendimientos similares a uno de acciones individuales, pero con 60-70% menos volatilidad.'},
+  ]},
+  {cat:'🚀 Interés Compuesto', color:'var(--amber)', items:[
+    {icon:'⏰',title:'Warren Buffett empezó a los 11',fact:'El 99% de la fortuna de Warren Buffett fue acumulada después de sus 50 años. El secreto no es el genio — es el tiempo que le dio al interés compuesto.'},
+    {icon:'💰',title:'$1 en 1626 vs hoy',fact:'Si los nativos que vendieron Manhattan por $24 en 1626 los hubieran invertido al 8% anual, hoy tendrían más de $300 trillones — más que toda la riqueza mundial.'},
+    {icon:'📅',title:'El costo de esperar 10 años',fact:'Si empiezas a invertir $2,000/año a los 25 vs los 35, al retirarte a los 65 tendrás el doble de dinero — aunque hayas aportado exactamente lo mismo.'},
+    {icon:'🔢',title:'La Regla del 72 en acción',fact:'Al 6% anual tu dinero se duplica en 12 años. Al 12% en 6 años. Al 18% en 4 años. La diferencia en rendimiento tiene efecto explosivo a largo plazo.'},
+  ]},
+  {cat:'🦅 Libertad Financiera', color:'var(--teal,#2DD4BF)', items:[
+    {icon:'4️⃣',title:'La Regla del 4% — probada 95 años',fact:'La Regla del 4% se basa en el estudio Trinity (1998) que analizó portafolios durante 95 años. Con ese retiro anual, el dinero dura 30+ años en el 95% de los casos históricos.'},
+    {icon:'🇺🇸',title:'El movimiento FIRE',fact:'FIRE (Financial Independence, Retire Early) tiene millones de seguidores en el mundo. La clave no es ganar más — es la tasa de ahorro. Con 50% de ahorro puedes retirarte en 17 años desde cero.'},
+    {icon:'🏠',title:'Ingresos pasivos en México',fact:'Las opciones más comunes de ingreso pasivo en México son: bienes raíces en renta, dividendos de acciones, CETES y fondos de inversión, derechos de autor y negocios automatizados.'},
+    {icon:'📐',title:'Tu número de libertad',fact:'Para calcular cuánto necesitas para retirarte: multiplica tu gasto mensual por 12 (gasto anual) y el resultado por 25. Ejemplo: $20,000/mes × 12 × 25 = $6,000,000.'},
+  ]},
+];
+
+function renderDatos(){
+  const el=document.getElementById('datosContent');
+  el.innerHTML=DATOS.map(cat=>`
+    <div style="margin-bottom:20px;">
+      <div style="font-size:13px;font-weight:800;color:${cat.color};letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;padding:6px 10px;background:${cat.color}18;border-radius:8px;">${cat.cat}</div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        ${cat.items.map(d=>`
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:14px;border-left:3px solid ${cat.color};">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+              <span style="font-size:18px;">${d.icon}</span>
+              <span style="font-size:13px;font-weight:800;color:var(--white);">${d.title}</span>
+            </div>
+            <p style="font-size:12px;color:rgba(240,238,255,0.7);line-height:1.7;margin:0;">${d.fact}</p>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
 }
 
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
