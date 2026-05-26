@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>FinExam — Educación Financiera</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#08080C;--bg2:#0F0F18;--bg3:#16161F;--bg4:#1E1E2A;--bg5:#252535;
+  --white:#F0EEFF;--muted:#6B6880;--muted2:#4A4760;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --purple:#7C6EFA;--purple-l:rgba(124,110,250,0.12);--purple-m:rgba(124,110,250,0.22);
+  --green:#3DDC84;--green-l:rgba(61,220,132,0.1);
+  --red:#FF5A5A;--red-l:rgba(255,90,90,0.1);
+  --amber:#F5A623;--amber-l:rgba(245,166,35,0.1);
+  --blue:#5B9EF5;--blue-l:rgba(91,158,245,0.1);
+  --font-d:'Fraunces',serif;--font-b:'Plus Jakarta Sans',sans-serif;
+  --r:16px;--r-sm:10px;--tab-h:70px;
+}
+html,body{height:100%;background:var(--bg);color:var(--white);font-family:var(--font-b);overflow:hidden;}
+.app{display:flex;flex-direction:column;height:100dvh;max-width:430px;margin:0 auto;background:var(--bg);}
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:calc(var(--tab-h)+8px);}
+.content::-webkit-scrollbar{display:none;}
+.page{display:none;min-height:100%;}
+.page.active{display:block;}
+
+/* ====== HOME ====== */
+.home-header{padding:24px 20px 0;}
+.home-title{font-family:var(--font-d);font-size:28px;font-style:italic;line-height:1.2;}
+.home-title span{color:var(--purple);}
+.home-sub{font-size:13px;color:var(--muted);margin-top:4px;}
+
+/* XP BAR */
+.xp-wrap{margin:14px 20px 0;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:13px 15px;}
+.xp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.xp-level{font-size:11px;font-weight:800;color:var(--purple);letter-spacing:1px;text-transform:uppercase;}
+.xp-pts{font-size:11px;color:var(--muted);}
+.xp-bar{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:3px;transition:width 0.7s cubic-bezier(.34,1.56,.64,1);}
+.xp-row2{display:flex;justify-content:space-between;margin-top:7px;font-size:11px;color:var(--muted);}
+.xp-streak{color:var(--amber);font-weight:700;}
+
+/* SECTION */
+.sec-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 10px;}
+.sec-title{font-size:15px;font-weight:800;}
+.sec-more{font-size:12px;color:var(--muted);cursor:pointer;}
+
+/* SUBJECT CARDS */
+.subjects-list{padding:0 20px;display:flex;flex-direction:column;gap:10px;}
+.subject-card{
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);
+  padding:16px;cursor:pointer;transition:border-color 0.15s;position:relative;overflow:hidden;
+}
+.subject-card:active{background:var(--bg4);}
+.subject-card.locked{opacity:0.45;cursor:not-allowed;}
+.subject-card.passed{border-color:rgba(61,220,132,0.3);}
+.subject-card.failed{border-color:rgba(255,90,90,0.2);}
+.sc-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.sc-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.sc-info{flex:1;}
+.sc-name{font-size:15px;font-weight:800;margin-bottom:2px;}
+.sc-desc{font-size:11px;color:var(--muted);}
+.sc-badge{font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px;flex-shrink:0;}
+.sc-badge.pass{background:var(--green-l);color:var(--green);}
+.sc-badge.fail{background:var(--red-l);color:var(--red);}
+.sc-badge.lock{background:var(--bg4);color:var(--muted);}
+.sc-badge.ready{background:var(--purple-l);color:var(--purple);}
+.sc-meta{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted);}
+.sc-bar-wrap{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;margin-top:8px;}
+.sc-bar{height:100%;border-radius:2px;transition:width 0.5s;}
+.sc-stats{display:flex;gap:14px;font-size:11px;color:var(--muted);}
+.sc-stat-val{color:var(--white);font-weight:700;}
+
+/* LEADERBOARD / STATS */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px;}
+.stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px;text-align:center;}
+.stat-num{font-family:var(--font-d);font-size:26px;font-style:italic;margin-bottom:3px;}
+.stat-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;}
+
+/* ====== EXAM SCREEN ====== */
+.exam-screen{position:fixed;inset:0;background:var(--bg);z-index:300;display:none;flex-direction:column;max-width:430px;margin:0 auto;}
+.exam-screen.open{display:flex;}
+
+/* EXAM HEADER */
+.exam-header{padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0;}
+.exam-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.exam-subject{font-size:12px;font-weight:800;color:var(--purple);letter-spacing:1px;text-transform:uppercase;}
+.exam-quit{font-size:13px;color:var(--muted);cursor:pointer;padding:4px 10px;border:1px solid var(--border);border-radius:6px;background:transparent;font-family:var(--font-b);}
+.exam-quit:hover{color:var(--white);}
+
+/* TIMER */
+.timer-wrap{display:flex;align-items:center;gap:10px;}
+.timer-bar{flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;}
+.timer-fill{height:100%;border-radius:3px;transition:width 0.1s linear,background 0.3s;}
+.timer-num{font-family:var(--font-d);font-size:18px;font-style:italic;min-width:36px;text-align:right;}
+
+/* PROGRESS */
+.exam-progress{display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--muted);}
+.ep-dots{display:flex;gap:4px;}
+.ep-dot{width:8px;height:8px;border-radius:50%;background:var(--bg4);}
+.ep-dot.done-ed{background:var(--green);}
+.ep-dot.wrong-ed{background:var(--red);}
+.ep-dot.cur-ed{background:var(--purple);animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+/* QUESTION BODY */
+.question-body{flex:1;overflow-y:auto;padding:20px;}
+.question-body::-webkit-scrollbar{display:none;}
+.q-type-tag{font-size:10px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.q-type-icon{width:20px;height:20px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;}
+.q-num{font-size:11px;color:var(--muted);margin-bottom:6px;}
+.q-text{font-family:var(--font-d);font-size:20px;font-style:italic;line-height:1.4;margin-bottom:6px;}
+.q-context{font-size:13px;color:rgba(240,238,255,0.6);line-height:1.6;margin-bottom:16px;background:var(--bg3);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px;}
+
+/* MULTIPLE CHOICE */
+.mc-options{display:flex;flex-direction:column;gap:8px;}
+.mc-opt{
+  padding:14px 16px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;
+  font-size:14px;font-weight:600;cursor:pointer;transition:all 0.15s;text-align:left;
+  font-family:var(--font-b);color:var(--white);display:flex;align-items:center;gap:12px;
+}
+.mc-opt:hover:not(.disabled){border-color:var(--border2);background:var(--bg4);}
+.mc-opt.selected{border-color:var(--purple);background:var(--purple-l);}
+.mc-opt.correct{border-color:var(--green);background:var(--green-l);color:var(--green);}
+.mc-opt.wrong{border-color:var(--red);background:var(--red-l);color:var(--red);}
+.mc-opt.disabled{cursor:not-allowed;}
+.mc-letter{width:28px;height:28px;border-radius:8px;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;transition:all 0.15s;}
+.mc-opt.selected .mc-letter{background:var(--purple);color:white;}
+.mc-opt.correct .mc-letter{background:var(--green);color:var(--bg);}
+.mc-opt.wrong .mc-letter{background:var(--red);color:white;}
+
+/* TRUE/FALSE */
+.tf-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.tf-opt{
+  padding:20px;background:var(--bg3);border:1px solid var(--border);border-radius:12px;
+  font-size:15px;font-weight:800;cursor:pointer;transition:all 0.15s;text-align:center;
+  font-family:var(--font-b);color:var(--white);
+}
+.tf-opt:hover:not(.disabled){border-color:var(--border2);}
+.tf-opt.selected{border-color:var(--purple);background:var(--purple-l);}
+.tf-opt.correct{border-color:var(--green);background:var(--green-l);color:var(--green);}
+.tf-opt.wrong{border-color:var(--red);background:var(--red-l);color:var(--red);}
+.tf-icon{font-size:28px;margin-bottom:6px;}
+
+/* FILL IN */
+.fill-wrap{display:flex;flex-direction:column;gap:10px;}
+.fill-input{background:var(--bg3);border:2px solid var(--border);border-radius:12px;padding:14px 16px;font-size:16px;font-family:var(--font-b);color:var(--white);width:100%;text-align:center;}
+.fill-input:focus{outline:none;border-color:var(--purple);}
+.fill-input.correct{border-color:var(--green);color:var(--green);}
+.fill-input.wrong{border-color:var(--red);color:var(--red);}
+.fill-hint{font-size:12px;color:var(--muted);text-align:center;}
+
+/* CASE */
+.case-context{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;}
+.case-label{font-size:10px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;}
+.case-text{font-size:13px;line-height:1.6;color:rgba(240,238,255,0.75);}
+.case-numbers{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px;}
+.cn-item{background:var(--bg4);border-radius:8px;padding:8px;text-align:center;}
+.cn-label{font-size:9px;color:var(--muted);text-transform:uppercase;margin-bottom:2px;}
+.cn-val{font-size:14px;font-weight:800;}
+
+/* FEEDBACK */
+.q-feedback{
+  margin-top:14px;padding:13px;border-radius:10px;font-size:13px;
+  line-height:1.6;display:none;
+}
+.q-feedback.show{display:block;}
+.q-feedback.correct{background:var(--green-l);border:1px solid rgba(61,220,132,0.3);color:var(--green);}
+.q-feedback.wrong{background:var(--red-l);border:1px solid rgba(255,90,90,0.3);}
+.qf-title{font-weight:800;margin-bottom:4px;}
+.qf-exp{font-size:12px;color:rgba(240,238,255,0.65);margin-top:4px;}
+
+/* EXAM FOOTER */
+.exam-footer{padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0;}
+.exam-next-btn{width:100%;padding:14px;background:var(--purple);color:white;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:var(--font-b);cursor:pointer;transition:all 0.15s;opacity:0.4;}
+.exam-next-btn.ready{opacity:1;}
+.exam-next-btn:active{opacity:0.85;}
+
+/* ====== RESULTS SCREEN ====== */
+.results-screen{position:fixed;inset:0;background:var(--bg);z-index:400;display:none;flex-direction:column;max-width:430px;margin:0 auto;overflow-y:auto;}
+.results-screen.open{display:flex;}
+.results-screen::-webkit-scrollbar{display:none;}
+.results-hero{
+  padding:32px 24px;
+  background:linear-gradient(135deg,#1A1040 0%,#0A0620 100%);
+  border-bottom:1px solid var(--border);text-align:center;
+}
+.results-emoji{font-size:64px;margin-bottom:10px;}
+.results-grade{font-family:var(--font-d);font-size:72px;font-style:italic;line-height:1;}
+.results-label{font-size:16px;font-weight:800;margin-bottom:4px;}
+.results-sub{font-size:13px;color:rgba(255,255,255,0.5);}
+.results-pass{color:var(--green);}
+.results-fail{color:var(--red);}
+.results-body{padding:20px;flex:1;}
+.results-breakdown{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.rb-item{display:flex;align-items:center;justify-content:space-between;padding:13px 14px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;}
+.rb-left{display:flex;align-items:center;gap:10px;}
+.rb-icon{font-size:18px;}
+.rb-text{font-size:13px;font-weight:600;}
+.rb-sub{font-size:11px;color:var(--muted);margin-top:1px;}
+.rb-val{font-size:14px;font-weight:800;}
+.rb-val.g{color:var(--green);}
+.rb-val.r{color:var(--red);}
+.rb-val.p{color:var(--purple);}
+
+/* REVIEW section */
+.review-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.review-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:13px;}
+.ri-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;}
+.ri-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+.ri-q{font-size:13px;font-weight:700;line-height:1.4;flex:1;}
+.ri-answer{font-size:12px;padding:6px 10px;border-radius:6px;margin-bottom:4px;}
+.ri-answer.correct{background:var(--green-l);color:var(--green);}
+.ri-answer.wrong{background:var(--red-l);color:var(--red);}
+.ri-exp{font-size:11px;color:var(--muted);line-height:1.5;}
+
+.results-actions{display:flex;flex-direction:column;gap:8px;padding:0 0 16px;}
+.btn-primary{width:100%;padding:14px;background:var(--purple);color:white;border:none;border-radius:12px;font-size:15px;font-weight:800;font-family:var(--font-b);cursor:pointer;}
+.btn-secondary{width:100%;padding:12px;background:transparent;border:1px solid var(--border2);border-radius:12px;font-size:14px;font-weight:700;font-family:var(--font-b);color:var(--muted);cursor:pointer;}
+
+/* ====== PROGRESS PAGE ====== */
+.progress-content{padding:20px;}
+.prog-hero{background:linear-gradient(135deg,#1A1040,#0A0620);border:1px solid rgba(124,110,250,0.2);border-radius:var(--r);padding:20px;margin-bottom:16px;text-align:center;}
+.ph-level{font-family:var(--font-d);font-size:52px;font-style:italic;color:var(--purple);}
+.ph-name{font-size:15px;font-weight:800;margin-bottom:8px;}
+.ph-bar{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden;margin:8px 0;}
+.ph-fill{height:100%;background:linear-gradient(90deg,var(--purple),var(--blue));border-radius:4px;transition:width 0.7s;}
+.ph-xp{font-size:11px;color:var(--muted);}
+.badges-wrap{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.badge-item{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+.badge-item.earned{border-color:rgba(245,166,35,0.4);background:rgba(245,166,35,0.05);}
+.badge-item.locked-b{opacity:0.35;}
+.bi-emoji{font-size:26px;margin-bottom:4px;}
+.bi-name{font-size:10px;font-weight:800;line-height:1.3;}
+.bi-desc{font-size:9px;color:var(--muted);margin-top:2px;}
+
+/* ====== REVIEW PAGE ====== */
+.review-page-content{padding:0 20px 20px;}
+
+/* TAB BAR */
+.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;height:var(--tab-h);background:rgba(8,8,12,0.96);backdrop-filter:blur(24px);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;z-index:100;padding-bottom:env(safe-area-inset-bottom,0);}
+.tab-btn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 10px;border:none;background:transparent;cursor:pointer;border-radius:10px;flex:1;transition:all 0.15s;}
+.tab-icon{font-size:22px;line-height:1;transition:transform 0.2s;}
+.tab-label{font-size:9px;font-weight:800;font-family:var(--font-b);color:var(--muted);letter-spacing:0.5px;text-transform:uppercase;}
+.tab-btn.active .tab-icon{transform:scale(1.12);}
+.tab-btn.active .tab-label{color:var(--purple);}
+
+/* TOAST / XP POPUP */
+.toast{position:fixed;bottom:calc(var(--tab-h)+14px);left:50%;transform:translateX(-50%) translateY(60px);background:var(--bg3);border:1px solid var(--border2);color:var(--white);padding:10px 22px;border-radius:20px;font-size:13px;font-weight:700;transition:transform 0.35s cubic-bezier(.34,1.56,.64,1);z-index:500;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+.xp-pop{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);background:linear-gradient(135deg,var(--purple),var(--blue));border-radius:20px;padding:24px 32px;text-align:center;z-index:600;transition:transform 0.3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;}
+.xp-pop.show{transform:translate(-50%,-50%) scale(1);}
+.xp-pop-icon{font-size:40px;margin-bottom:6px;}
+.xp-pop-txt{font-family:var(--font-d);font-size:22px;font-style:italic;color:white;}
+.xp-pop-pts{font-size:14px;color:rgba(255,255,255,0.65);margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="content" id="appContent">
+
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+      <div class="home-header">
+        <div class="home-title">Educación <span>Financiera</span></div>
+        <div class="home-sub">Aprende, examínate y domina tus finanzas</div>
+      </div>
+
+      <div class="xp-wrap">
+        <div class="xp-top">
+          <span class="xp-level" id="xpLevel">Nivel 1 — Principiante</span>
+          <span class="xp-pts" id="xpPts">0 XP</span>
+        </div>
+        <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+        <div class="xp-row2">
+          <span id="xpNext">0 / 500 XP al siguiente nivel</span>
+          <span class="xp-streak" id="xpStreak">🔥 0 días</span>
+        </div>
+      </div>
+
+      <div class="sec-head"><div class="sec-title">Estadísticas</div></div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-num" id="statExams" style="color:var(--purple)">0</div><div class="stat-lbl">Exámenes tomados</div></div>
+        <div class="stat-card"><div class="stat-num" id="statAvg" style="color:var(--amber)">—</div><div class="stat-lbl">Promedio general</div></div>
+        <div class="stat-card"><div class="stat-num" id="statPassed" style="color:var(--green)">0</div><div class="stat-lbl">Temas aprobados</div></div>
+        <div class="stat-card"><div class="stat-num" id="statStreak" style="color:var(--red)">0</div><div class="stat-lbl">Racha de días</div></div>
+      </div>
+
+      <div class="sec-head"><div class="sec-title">Mis materias</div></div>
+      <div class="subjects-list" id="subjectsList"></div>
+      <div style="height:20px;"></div>
+    </div>
+
+    <!-- REVIEW -->
+    <div class="page" id="page-review">
+      <div class="home-header" style="padding-bottom:12px;">
+        <div class="home-title">Repasar <span>temas</span></div>
+        <div class="home-sub">Estudia antes de examinarte</div>
+      </div>
+      <div class="review-page-content" id="reviewPageContent"></div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="page" id="page-progress">
+      <div class="home-header" style="padding-bottom:0;">
+        <div class="home-title">Mi <span>progreso</span></div>
+      </div>
+      <div class="progress-content">
+        <div class="prog-hero">
+          <div class="ph-level" id="phLevel">1</div>
+          <div class="ph-name" id="phName">Principiante Financiero</div>
+          <div class="ph-bar"><div class="ph-fill" id="phFill" style="width:0%"></div></div>
+          <div class="ph-xp" id="phXP">0 / 500 XP</div>
+        </div>
+        <div class="sec-head" style="padding:0 0 10px;"><div class="sec-title">Logros</div></div>
+        <div class="badges-wrap" id="badgesWrap"></div>
+        <div class="sec-head" style="padding:0 0 10px;"><div class="sec-title">Historial de exámenes</div></div>
+        <div id="examHistory" style="display:flex;flex-direction:column;gap:8px;"></div>
+        <div style="height:20px;"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-page="home" onclick="goTo('home',this)"><div class="tab-icon">📋</div><div class="tab-label">Exámenes</div></button>
+    <button class="tab-btn" data-page="review" onclick="goTo('review',this)"><div class="tab-icon">📖</div><div class="tab-label">Repasar</div></button>
+    <button class="tab-btn" data-page="progress" onclick="goTo('progress',this)"><div class="tab-icon">🏆</div><div class="tab-label">Progreso</div></button>
+  </div>
+</div>
+
+<!-- EXAM SCREEN -->
+<div class="exam-screen" id="examScreen">
+  <div class="exam-header">
+    <div class="exam-top">
+      <div class="exam-subject" id="examSubjectName">—</div>
+      <button class="exam-quit" onclick="confirmQuit()">Salir</button>
+    </div>
+    <div class="timer-wrap">
+      <div class="timer-bar"><div class="timer-fill" id="timerFill" style="width:100%"></div></div>
+      <div class="timer-num" id="timerNum">30</div>
+    </div>
+    <div class="exam-progress" style="margin-top:8px;">
+      <span id="examQNum">Pregunta 1 de 10</span>
+      <div class="ep-dots" id="epDots"></div>
+      <span id="examScore">✓ 0 | ✗ 0</span>
+    </div>
+  </div>
+  <div class="question-body" id="questionBody"></div>
+  <div class="exam-footer">
+    <button class="exam-next-btn" id="examNextBtn" onclick="nextQuestion()">Confirmar respuesta</button>
+  </div>
+</div>
+
+<!-- RESULTS SCREEN -->
+<div class="results-screen" id="resultsScreen">
+  <div class="results-hero">
+    <div class="results-emoji" id="resEmoji">🎉</div>
+    <div class="results-grade" id="resGrade">—</div>
+    <div class="results-label" id="resLabel">—</div>
+    <div class="results-sub" id="resSub">—</div>
+  </div>
+  <div class="results-body">
+    <div class="sec-head" style="padding:0 0 10px;"><div class="sec-title">Desglose</div></div>
+    <div class="results-breakdown" id="resBreakdown"></div>
+    <div class="sec-head" style="padding:0 0 10px;"><div class="sec-title">Revisión de respuestas</div></div>
+    <div class="review-list" id="resReview"></div>
+    <div class="results-actions">
+      <button class="btn-primary" id="resPrimaryBtn" onclick="retakeExam()">Repetir examen</button>
+      <button class="btn-secondary" onclick="closeResults()">Volver al inicio</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="xp-pop" id="xpPop"></div>
+
+<script>
+// ===================== SUBJECTS & QUESTIONS =====================
+const SUBJECTS = [
+  {
+    id:'presupuesto', name:'Presupuesto Personal', icon:'💰',
+    color:'#3DDC84', bg:'rgba(61,220,132,0.1)',
+    desc:'Controla tu dinero antes de que él te controle',
+    timePerQ:30, passingScore:70,
+    study:`
+      <h3 style="font-family:var(--font-d);font-size:20px;font-style:italic;margin-bottom:12px;">Presupuesto Personal</h3>
+      <p style="font-size:13px;color:rgba(240,238,255,0.75);line-height:1.8;margin-bottom:12px;">Un presupuesto es un plan que le dice a tu dinero exactamente adónde ir cada mes.</p>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--green);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📊 Regla 50/30/20</div>
+        <div style="font-size:13px;line-height:1.8;color:rgba(240,238,255,0.75);">• <b style="color:var(--white)">50%</b> Necesidades (renta, comida, transporte)<br>• <b style="color:var(--white)">30%</b> Deseos (salidas, entretenimiento)<br>• <b style="color:var(--white)">20%</b> Ahorro e inversión</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">💡 Conceptos clave</div>
+        <div style="font-size:13px;line-height:1.8;color:rgba(240,238,255,0.75);">• <b style="color:var(--white)">Gastos fijos:</b> igual cada mes (renta, seguro)<br>• <b style="color:var(--white)">Gastos variables:</b> cambian (comida, gasolina)<br>• <b style="color:var(--white)">Fondo de emergencia:</b> 3-6 meses de gastos<br>• <b style="color:var(--white)">Pagarte primero:</b> ahorra antes de gastar</div>
+      </div>`,
+    questions:[
+      {type:'mc',q:'Según la regla 50/30/20, ¿qué porcentaje de tu ingreso debe ir al ahorro e inversión?',opts:['10%','30%','20%','50%'],correct:2,exp:'La regla 50/30/20 destina el 20% al ahorro e inversión. Este porcentaje se transfiere primero, antes de gastar.'},
+      {type:'tf',q:'Un fondo de emergencia debe guardarse en acciones de la bolsa para que genere más rendimiento.',correct:false,exp:'Falso. El fondo de emergencia debe estar en una cuenta de acceso inmediato (no inversiones) porque necesitas poder retirarlo en cualquier momento.'},
+      {type:'mc',q:'¿Cuál es la estrategia correcta para ahorrar?',opts:['Gastar primero y guardar lo que sobre','Ahorrar primero al cobrar, luego gastar el resto','Ahorrar solo en diciembre','Esperar a ganar más dinero para ahorrar'],correct:1,exp:'"Págate primero" significa transferir tu ahorro el mismo día que cobras. Lo que no ves, no lo gastas.'},
+      {type:'fill',q:'La regla ____ destina 50% a necesidades, 30% a deseos y 20% a ahorro.',answer:'50/30/20',hint:'Es una fracción con tres partes',exp:'La regla 50/30/20 es la distribución más recomendada para el presupuesto personal.'},
+      {type:'case',q:'Análisis de situación: ¿Qué debe hacer Sofía?',context:'Sofía gana $12,000 al mes. Paga $5,500 de renta, $2,000 de comida, $800 de transporte, $1,200 en salidas y no ahorra nada. Al final del mes siempre le quedan $500.',numbers:[{l:'Ingreso',v:'$12,000'},{l:'Gastos fijos',v:'$8,300'},{l:'Gastos variables',v:'$1,200'},{l:'Ahorro actual',v:'$0'}],opts:['Todo está bien, el sobrante es su ahorro','Reducir salidas y automatizar $2,000 de ahorro','Buscar un trabajo mejor pagado','No hay solución con ese ingreso'],correct:1,exp:'Sofía debe reducir gastos variables y automatizar su ahorro. Con $12,000 debería ahorrar mínimo $2,400 (20%). Actualmente gasta el 99% de su ingreso.'},
+      {type:'tf',q:'Los gastos fijos como la renta son más fáciles de reducir que los gastos variables.',correct:false,exp:'Falso. Los gastos variables (comida fuera, entretenimiento, suscripciones) son los más fáciles de reducir a corto plazo. Los fijos requieren decisiones más grandes.'},
+      {type:'mc',q:'¿Cuántos meses de gastos debe tener un fondo de emergencia?',opts:['1 mes','6 a 12 meses','3 a 6 meses','2 semanas'],correct:2,exp:'El estándar recomendado es 3-6 meses de gastos esenciales. Menos de 3 es insuficiente para emergencias reales como pérdida de empleo.'},
+      {type:'fill',q:'Si ganas $15,000 mensuales, según la regla 50/30/20 deberías ahorrar $____.',answer:'3000',hint:'El 20% de $15,000',exp:'20% de $15,000 = $3,000. Este monto debe transferirse automáticamente al cobrar.'},
+      {type:'case',q:'Caso de emergencia financiera',context:'Carlos tenía $0 en fondo de emergencia. Su carro se descompuso y la reparación costó $8,000. Tuvo que poner todo a la tarjeta de crédito con tasa del 36% anual.',numbers:[{l:'Emergencia',v:'$8,000'},{l:'Tasa tarjeta',v:'36% anual'},{l:'Pago mínimo',v:'$320/mes'},{l:'Tiempo para pagar',v:'~36 meses'}],opts:['Carlos hizo lo correcto usando la tarjeta','Carlos debería haber tenido fondo de emergencia','No hay diferencia, al final se paga igual','La tarjeta fue la única opción posible'],correct:1,exp:'Sin fondo de emergencia, Carlos terminó pagando intereses durante 3 años. Con un fondo de $8,000 ahorrado, hubiera resuelto el problema sin costo adicional.'},
+      {type:'mc',q:'¿Con qué frecuencia debes revisar y ajustar tu presupuesto?',opts:['Una vez al año','Cada semana sin falta','Mensualmente','Solo cuando tienes problemas'],correct:2,exp:'La revisión mensual es el estándar. Cada mes es diferente y el presupuesto debe adaptarse. 30 minutos al mes pueden transformar tus finanzas.'},
+    ]
+  },
+  {
+    id:'deuda', name:'Deuda e Intereses', icon:'🔗',
+    color:'#FF5A5A', bg:'rgba(255,90,90,0.1)',
+    desc:'Entiende cómo funciona la deuda y cómo dominarla',
+    timePerQ:35, passingScore:70,
+    study:`
+      <h3 style="font-family:var(--font-d);font-size:20px;font-style:italic;margin-bottom:12px;">Deuda e Intereses</h3>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">💳 Tipos de deuda</div>
+        <div style="font-size:13px;line-height:1.8;color:rgba(240,238,255,0.75);">• <b style="color:var(--white)">Buena:</b> genera valor (hipoteca, educación)<br>• <b style="color:var(--white)">Mala:</b> financia consumo (tarjetas, préstamos de consumo)</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📈 Estrategias para pagar</div>
+        <div style="font-size:13px;line-height:1.8;color:rgba(240,238,255,0.75);">• <b style="color:var(--white)">Avalancha:</b> paga primero la deuda con mayor tasa<br>• <b style="color:var(--white)">Bola de nieve:</b> paga primero la deuda más pequeña (motivación)</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;">
+        <div style="font-size:10px;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">⚠️ Tarjetas de crédito en México</div>
+        <div style="font-size:13px;line-height:1.8;color:rgba(240,238,255,0.75);">Las tarjetas en México cobran tasas del 30-60% anual. Pagar solo el mínimo puede triplicar lo que debes en pocos años.</div>
+      </div>`,
+    questions:[
+      {type:'mc',q:'¿Qué tipo de deuda se considera "buena"?',opts:['Tarjeta de crédito para ropa','Préstamo para vacaciones','Hipoteca para comprar una casa','Crédito para pantalla nueva'],correct:2,exp:'Una hipoteca es "buena deuda" porque financia un activo que puede ganar valor. Las deudas malas financian consumo que no genera retorno.'},
+      {type:'tf',q:'Pagar solo el pago mínimo de tu tarjeta de crédito es una estrategia financiera inteligente.',correct:false,exp:'Falso. El pago mínimo apenas cubre los intereses. Con tasas del 36-60% anual, el saldo puede crecer o tardarse décadas en pagarse.'},
+      {type:'mc',q:'La estrategia "avalancha" para pagar deudas consiste en:',opts:['Pagar todas las deudas por igual cada mes','Pagar primero la deuda con el saldo más pequeño','Pagar primero la deuda con la tasa de interés más alta','Consolidar todas las deudas en una sola'],correct:2,exp:'La avalancha te ahorra más dinero en intereses porque elimina primero las deudas más costosas. La bola de nieve es más motivadora pero matemáticamente menos eficiente.'},
+      {type:'fill',q:'Si debes $10,000 en una tarjeta con tasa del 36% anual, en intereses mensuales pagas aproximadamente $____.',answer:'300',hint:'36% / 12 meses = 3% mensual',exp:'36% anual ÷ 12 = 3% mensual. 3% de $10,000 = $300 solo en intereses. Por eso el pago mínimo casi no baja el saldo.'},
+      {type:'case',q:'¿Cuál es la mejor estrategia para Roberto?',context:'Roberto tiene tres deudas: Tarjeta A: $5,000 al 48% anual. Tarjeta B: $15,000 al 24% anual. Préstamo: $8,000 al 18% anual. Tiene $3,000 extra al mes para pagar deudas.',numbers:[{l:'Tarjeta A',v:'48% — $5,000'},{l:'Tarjeta B',v:'24% — $15,000'},{l:'Préstamo',v:'18% — $8,000'}],opts:['Dividir los $3,000 entre las tres deudas','Pagar primero el préstamo porque es el más pequeño','Pagar mínimos en B y préstamo, todo el extra en Tarjeta A','Pagar primero Tarjeta B por ser la más grande'],correct:2,exp:'Método avalancha: paga mínimos en todas, concentra el extra en la Tarjeta A (48% anual). Es la más costosa y eliminarla libera dinero rápidamente.'},
+      {type:'tf',q:'Consolidar varias deudas en un solo préstamo siempre es la mejor opción.',correct:false,exp:'Falso. Depende de la tasa del préstamo consolidador. Si es mayor que tus deudas actuales, empeorarás tu situación. Evalúa siempre las tasas.'},
+      {type:'mc',q:'¿Qué porcentaje de tu ingreso mensual se recomienda que no exceda el pago de deudas?',opts:['10%','50%','35%','No tiene límite'],correct:2,exp:'El ratio deuda/ingreso recomendado es máximo 35-40%. Si pagas más del 35% de tu ingreso en deudas, tu salud financiera está en riesgo.'},
+      {type:'fill',q:'La estrategia de pago que te ahorra más dinero en intereses se llama método ____.',answer:'avalancha',hint:'Como el fenómeno de la montaña',exp:'El método avalancha (pagar primero la deuda de mayor tasa) es matemáticamente el más eficiente para minimizar intereses totales.'},
+      {type:'mc',q:'Una tarjeta de crédito en México tiene tasa promedio de:',opts:['5-10% anual','15-20% anual','30-60% anual','80-100% anual'],correct:2,exp:'Las tarjetas en México cobran entre 30-60% anual en promedio según la CONDUSEF. Es una de las tasas más altas del mundo. Úsalas con mucho cuidado.'},
+      {type:'case',q:'El costo real de pagar el mínimo',context:'Ana tiene $20,000 en su tarjeta al 42% anual. Su pago mínimo es $800/mes. Si solo paga el mínimo cada mes...',numbers:[{l:'Deuda inicial',v:'$20,000'},{l:'Tasa anual',v:'42%'},{l:'Pago mínimo',v:'$800/mes'},{l:'Tiempo para pagar',v:'~5 años'}],opts:['Pagará exactamente $20,000','Pagará alrededor de $48,000 en total','Pagará $25,000 en total','La deuda desaparece en 2 años'],correct:1,exp:'Con solo pagar el mínimo, Ana terminará pagando más de $48,000 por una deuda de $20,000. Los intereses casi duplican el monto original.'},
+    ]
+  },
+  {
+    id:'inversion', name:'Inversión y Ahorro', icon:'📈',
+    color:'#7C6EFA', bg:'rgba(124,110,250,0.1)',
+    desc:'Haz que tu dinero trabaje para ti',
+    timePerQ:35, passingScore:70,
+    study:`
+      <h3 style="font-family:var(--font-d);font-size:20px;font-style:italic;margin-bottom:12px;">Inversión y Ahorro</h3>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🇲🇽 Opciones en México</div>
+        <div style="font-size:13px;line-height:1.8;color:rgba(240,238,255,0.75);">• <b style="color:var(--white)">CETES:</b> desde $100, ~11% anual, gobierno federal<br>• <b style="color:var(--white)">Nu Cuenta:</b> ~15% anual, liquidez inmediata<br>• <b style="color:var(--white)">GBM+ / Kuspit:</b> ETFs y acciones desde poco<br>• <b style="color:var(--white)">Afore:</b> retiro, fondos de largo plazo</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">⚖️ Riesgo vs Rendimiento</div>
+        <div style="font-size:13px;line-height:1.8;color:rgba(240,238,255,0.75);">• Mayor rendimiento = mayor riesgo<br>• Diversifica: no pongas todo en un solo instrumento<br>• El tiempo es tu mayor aliado</div>
+      </div>`,
+    questions:[
+      {type:'mc',q:'¿Por qué es necesario invertir y no solo guardar el dinero?',opts:['Para presumir que inviertes','Porque la inflación reduce el valor del dinero parado','Porque los bancos lo exigen','No es necesario, guardar es suficiente'],correct:1,exp:'La inflación en México (~5% anual) hace que el dinero parado pierda poder adquisitivo. $10,000 hoy comprarán menos en 10 años si no generan rendimiento.'},
+      {type:'tf',q:'CETES son instrumentos de inversión respaldados por el gobierno federal mexicano.',correct:true,exp:'Verdadero. CETES (Certificados de la Tesorería) son emitidos por el gobierno federal, siendo el emisor más confiable de México.'},
+      {type:'mc',q:'¿Qué son los ETFs?',opts:['Tarjetas de débito especiales','Fondos que replican un índice del mercado','Cuentas de ahorro bancarias','Préstamos de inversión'],correct:1,exp:'Los ETFs (Exchange-Traded Funds) son fondos que replican índices como el S&P 500. Permiten diversificación a bajo costo desde pocas decenas de pesos.'},
+      {type:'fill',q:'La diversificación significa no poner todos los huevos en un solo ____.',answer:'canasta',hint:'Objeto donde se guardan huevos',exp:'Diversificar es distribuir tu dinero en diferentes instrumentos para reducir el riesgo. Si uno baja, los otros pueden compensar.'},
+      {type:'mc',q:'¿Cuál instrumento tiene mejor rendimiento pero también más riesgo?',opts:['CETES','Cuenta de ahorros bancaria','Acciones de bolsa','Cuenta de nómina'],correct:2,exp:'Las acciones históricamente dan los mejores rendimientos a largo plazo (~10-12% anual), pero pueden bajar significativamente en el corto plazo.'},
+      {type:'case',q:'Decisión de inversión para Laura',context:'Laura tiene $50,000 ahorrados y quiere invertirlos. Necesita $20,000 disponibles en 6 meses para una emergencia, y el resto no lo necesita en al menos 5 años.',numbers:[{l:'Total ahorrado',v:'$50,000'},{l:'Para emergencia',v:'$20,000 (6 meses)'},{l:'Largo plazo',v:'$30,000 (5+ años)'}],opts:['Todo a CETES a 1 año','$20,000 en cuenta líquida + $30,000 en ETFs','Todo en acciones para máximo rendimiento','Todo en cuenta de ahorros bancaria'],correct:1,exp:'Correcta diversificación por horizonte temporal: liquidez para la emergencia, y ETFs para el largo plazo donde el tiempo permite asumir más riesgo.'},
+      {type:'tf',q:'Es mejor esperar a tener mucho dinero para comenzar a invertir.',correct:false,exp:'Falso. El tiempo en el mercado es más valioso que el monto. Invertir $500/mes durante 30 años genera más que invertir $5,000/mes durante 10 años.'},
+      {type:'mc',q:'¿Desde cuánto puedes invertir en CETES Directo?',opts:['$1,000','$500','$100','$10,000'],correct:2,exp:'CETES Directo permite invertir desde $100 pesos. No hay excusa para no empezar — la barrera de entrada es mínima.'},
+      {type:'fill',q:'Si inviertes $10,000 a una tasa del 10% anual, al cabo de un año tendrás $____.',answer:'11000',hint:'$10,000 más el 10%',exp:'$10,000 × 1.10 = $11,000. El 10% de $10,000 son $1,000 de ganancia en el primer año.'},
+      {type:'mc',q:'¿Qué es el Afore?',opts:['Una tarjeta de crédito gubernamental','Fondo de ahorro para el retiro administrado por el IMSS','Sistema de ahorro para el retiro con aportaciones del trabajador y empleador','Una cuenta de inversión en el extranjero'],correct:2,exp:'El Afore (Administradora de Fondos para el Retiro) es el sistema de pensiones donde el trabajador, el empleador y el gobierno hacen aportaciones para el retiro.'},
+    ]
+  },
+  {
+    id:'interes_compuesto', name:'Interés Compuesto', icon:'🚀',
+    color:'#F5A623', bg:'rgba(245,166,35,0.1)',
+    desc:'La octava maravilla del mundo según Einstein',
+    timePerQ:40, passingScore:75,
+    study:`
+      <h3 style="font-family:var(--font-d);font-size:20px;font-style:italic;margin-bottom:12px;">Interés Compuesto</h3>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🧮 Fórmula básica</div>
+        <div style="font-size:14px;text-align:center;font-weight:800;color:var(--white);padding:10px;background:var(--bg4);border-radius:8px;margin-bottom:8px;">A = P × (1 + r)ⁿ</div>
+        <div style="font-size:12px;color:rgba(240,238,255,0.65);line-height:1.8;">A = Monto final<br>P = Capital inicial<br>r = Tasa de interés<br>n = Número de períodos</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">⏰ Regla del 72</div>
+        <div style="font-size:13px;color:rgba(240,238,255,0.75);line-height:1.8;">Divide 72 entre la tasa de interés para saber en cuántos años se duplica tu dinero.<br><b style="color:var(--white)">72 ÷ 10% = 7.2 años</b></div>
+      </div>`,
+    questions:[
+      {type:'mc',q:'¿Qué significa "interés compuesto"?',opts:['Interés calculado solo sobre el capital original','Interés que se gana sobre el capital más los intereses acumulados','Un tipo de préstamo bancario','Interés que se paga mensualmente'],correct:1,exp:'El interés compuesto se calcula sobre el capital original MÁS los intereses ya ganados. Esto crea un efecto exponencial que acelera el crecimiento.'},
+      {type:'fill',q:'Si tienes $5,000 al 10% anual por 1 año, el interés ganado es $____.',answer:'500',hint:'El 10% de $5,000',exp:'10% de $5,000 = $500. El segundo año, el 10% se aplica sobre $5,500, y así sucesivamente.'},
+      {type:'mc',q:'Usando la Regla del 72, ¿en cuántos años se duplica el dinero al 9% anual?',opts:['4 años','8 años','12 años','6 años'],correct:1,exp:'Regla del 72: 72 ÷ 9 = 8 años. Esta regla da una aproximación muy útil para cálculos rápidos.'},
+      {type:'tf',q:'Empezar a invertir a los 25 años es mejor que empezar a los 35, aunque inviertas menos dinero.',correct:true,exp:'Verdadero. El tiempo es el factor más poderoso del interés compuesto. 10 años extra pueden significar el doble o triple del resultado final.'},
+      {type:'case',q:'El poder del tiempo en la inversión',context:'Ana empieza a invertir $1,000/mes a los 25 años al 10% anual. Carlos empieza $2,000/mes a los 35 años al 10% anual. Ambos se retiran a los 65.',numbers:[{l:'Ana: $1,000/mes',v:'40 años invertidos'},{l:'Carlos: $2,000/mes',v:'30 años invertidos'},{l:'Ana total',v:'~$6.3 millones'},{l:'Carlos total',v:'~$4.5 millones'}],opts:['Carlos gana más porque aporta más','Ana gana más gracias al poder del tiempo','Ambos terminan con lo mismo','No hay suficiente información'],correct:1,exp:'Ana termina con más dinero aunque aportó la mitad. 10 años extra de interés compuesto superan duplicar las aportaciones. El tiempo es el activo más valioso.'},
+      {type:'mc',q:'¿Cuánto se convierte $10,000 al 10% anual en 30 años (sin aportar más)?',opts:['$30,000','$100,000','$174,494','$50,000'],correct:2,exp:'$10,000 × (1.10)^30 ≈ $174,494. El dinero se multiplicó por 17 sin agregar nada más — solo el poder del interés compuesto.'},
+      {type:'tf',q:'La frecuencia de capitalización (mensual vs anual) no afecta el resultado final.',correct:false,exp:'Falso. A mayor frecuencia de capitalización (diaria > mensual > anual), mayor rendimiento final, porque el interés se reinvierte más seguido.'},
+      {type:'fill',q:'La fórmula del interés compuesto es A = P × (1 + r)__',answer:'n',hint:'La variable que representa el tiempo',exp:'La "n" representa el número de períodos. Es el factor más poderoso: a mayor n, mayor el efecto exponencial.'},
+      {type:'mc',q:'¿Qué describe mejor el "efecto bola de nieve" del interés compuesto?',opts:['El dinero crece lentamente al principio y más rápido con el tiempo','El dinero crece igual de rápido siempre','El dinero crece más rápido al inicio','El crecimiento es impredecible'],correct:0,exp:'Exacto. Al inicio parece lento, pero con el tiempo el crecimiento se acelera exponencialmente. Por eso la gente subestima el interés compuesto a corto plazo y lo sobreestima a largo plazo.'},
+      {type:'case',q:'Inflación vs interés compuesto',context:'Miguel guarda $100,000 en una caja fuerte. La inflación es del 5% anual. Después de 10 años, sus $100,000 nominales valen mucho menos en términos reales.',numbers:[{l:'Capital inicial',v:'$100,000'},{l:'Inflación anual',v:'5%'},{l:'Valor real en 10 años',v:'~$61,391'},{l:'Si invertía al 10%',v:'~$259,374'}],opts:['Guardar en caja es lo más seguro','La diferencia es mínima','No invertir le costó ~$198,000 de riqueza real','La inflación no afecta el dinero en efectivo'],correct:2,exp:'Al no invertir, Miguel perdió casi $40,000 de poder adquisitivo por la inflación Y dejó de ganar $159,374 de rendimiento. El costo de oportunidad de no invertir es enorme.'},
+    ]
+  },
+  {
+    id:'libertad', name:'Libertad Financiera', icon:'🦅',
+    color:'#2DD4BF', bg:'rgba(45,212,191,0.1)',
+    desc:'Diseña la vida que quieres con tus finanzas',
+    timePerQ:40, passingScore:75,
+    study:`
+      <h3 style="font-family:var(--font-d);font-size:20px;font-style:italic;margin-bottom:12px;">Libertad Financiera</h3>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--teal,#2DD4BF);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">🎯 ¿Qué es?</div>
+        <div style="font-size:13px;color:rgba(240,238,255,0.75);line-height:1.8;">Tener suficientes activos para que tus inversiones generen los ingresos necesarios para vivir, sin necesidad de trabajar activamente.</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:10px;">
+        <div style="font-size:10px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">📐 Regla del 4%</div>
+        <div style="font-size:13px;color:rgba(240,238,255,0.75);line-height:1.8;">Necesitas <b style="color:var(--white)">25 veces tus gastos anuales</b> invertidos para retirarte. Cada año retiras el 4% sin agotar el capital.<br><b style="color:var(--white)">Gasto anual × 25 = Tu número de libertad</b></div>
+      </div>`,
+    questions:[
+      {type:'mc',q:'Según la Regla del 4%, si gastas $20,000/mes, ¿cuánto necesitas invertido para retirarte?',opts:['$2,400,000','$6,000,000','$1,200,000','$4,800,000'],correct:1,exp:'$20,000/mes × 12 = $240,000/año. $240,000 × 25 = $6,000,000. Con eso puedes retirar el 4% anual ($240,000) indefinidamente.'},
+      {type:'tf',q:'La libertad financiera solo es posible para personas con ingresos muy altos.',correct:false,exp:'Falso. La libertad financiera depende de la diferencia entre ingresos y gastos, no del monto absoluto. Alguien que gana $10,000 y ahorra $3,000 avanza más que quien gana $50,000 y gasta $49,000.'},
+      {type:'fill',q:'Para calcular tu "número de libertad" multiplicas tus gastos anuales por ____.',answer:'25',hint:'Es la inversa del 4%',exp:'La Regla del 4% implica multiplicar los gastos anuales por 25. Este es el capital necesario para que el 4% anual cubra tus gastos indefinidamente.'},
+      {type:'mc',q:'¿Qué son los "ingresos pasivos"?',opts:['Salario por trabajar tiempo parcial','Dinero que recibes sin trabajar activamente (rentas, dividendos, intereses)','Ingresos del gobierno','Ingresos de tu pareja'],correct:1,exp:'Los ingresos pasivos son dinero que llega sin intercambio directo de tiempo. Incluyen: rentas, dividendos, intereses de inversiones, regalías. Son la base de la libertad financiera.'},
+      {type:'case',q:'El camino de Diana hacia la libertad financiera',context:'Diana gana $25,000/mes, gasta $15,000 y ahorra $10,000 (40%). Invierte todo en instrumentos que rinden 10% anual. Sus gastos objetivo en retiro son $18,000/mes.',numbers:[{l:'Ahorro mensual',v:'$10,000'},{l:'Rendimiento',v:'10% anual'},{l:'Meta',v:'$5,400,000'},{l:'Tiempo estimado',v:'~22 años'}],opts:['Diana nunca podrá retirarse a ese ritmo','Diana logrará la libertad financiera en ~22 años','Necesita ganar más para retirarse','$5,400,000 es imposible de alcanzar'],correct:1,exp:'Con una tasa de ahorro del 40% y rendimientos del 10%, Diana alcanzará su número de libertad en aproximadamente 22 años. La consistencia y el tiempo lo hacen posible.'},
+      {type:'mc',q:'¿Cuál es el primer paso hacia la libertad financiera?',opts:['Buscar el negocio perfecto','Gastar menos de lo que ganas y ahorrar la diferencia','Comprar propiedades','Esperar heredar dinero'],correct:1,exp:'El primer paso es siempre el mismo: generar un excedente (ganar > gastar). Sin excedente no hay capital para invertir, sin capital no hay crecimiento.'},
+      {type:'tf',q:'Una tasa de ahorro del 50% permite alcanzar la libertad financiera más rápido que del 10%.',correct:true,exp:'Verdadero. Una tasa de ahorro más alta significa más capital invertido y menos tiempo necesario. Al 50%, se puede lograr la independencia financiera en ~17 años vs ~40+ años al 10%.'},
+      {type:'mc',q:'¿Qué es el "número FIRE" (Financial Independence, Retire Early)?',opts:['Tu salario ideal','El monto de inversiones para vivir de rendimientos para siempre','Tu meta de ahorro anual','El número de fuentes de ingreso que necesitas'],correct:1,exp:'El número FIRE es tu capital de libertad — la cantidad invertida donde el rendimiento cubre todos tus gastos sin trabajar. Se calcula con la Regla del 25 (o del 4%).'},
+      {type:'fill',q:'Si necesitas $3,000,000 para retirarte y ahorras $5,000/mes al 10% anual, tardas aproximadamente ____ años.',answer:'25',hint:'Entre 20 y 30 años',exp:'Con $5,000/mes al 10% anual, se necesitan aproximadamente 25 años para acumular $3,000,000. El interés compuesto hace el trabajo pesado en los últimos años.'},
+      {type:'case',q:'Comparación de dos caminos financieros',context:'Luis y Pedro tienen 30 años y ganan lo mismo ($20,000/mes). Luis ahorra el 5% ($1,000/mes). Pedro ahorra el 30% ($6,000/mes). Ambos invierten al 10% anual.',numbers:[{l:'Luis: $1,000/mes',v:'~$2M a los 65'},{l:'Pedro: $6,000/mes',v:'~$13.6M a los 65'},{l:'Diferencia',v:'×6.8 más dinero'},{l:'Diferencia real',v:'>35 años de libertad'}],opts:['La diferencia es solo el dinero extra aportado','El estilo de vida de Luis es más disfrutable','Pedro tiene 6.8 veces más riqueza y potencialmente 35 años más de libertad','El ahorro alto sacrifica demasiado la vida'],correct:2,exp:'La diferencia no es solo matemática — Pedro puede retirarse décadas antes. La tasa de ahorro, no el ingreso, determina cuándo puedes ser libre financieramente.'},
+    ]
+  },
+];
+
+const LEVELS=[
+  {name:'Principiante',xp:0,max:500},
+  {name:'Aprendiz',xp:500,max:1200},
+  {name:'Consciente',xp:1200,max:2500},
+  {name:'Aplicado',xp:2500,max:5000},
+  {name:'Experto',xp:5000,max:10000},
+  {name:'Maestro',xp:10000,max:20000},
+];
+
+const BADGES=[
+  {id:'first_exam',emoji:'🎯',name:'Primer examen',desc:'Completaste tu primer examen',earned:false},
+  {id:'perfect_score',emoji:'💯',name:'Perfecto',desc:'100% en un examen',earned:false},
+  {id:'all_passed',emoji:'🏆',name:'Graduado',desc:'Aprobaste todos los temas',earned:false},
+  {id:'comeback',emoji:'💪',name:'Persistente',desc:'Reprobaste y volviste a pasar',earned:false},
+  {id:'streak_3',emoji:'🔥',name:'En racha',desc:'3 días seguidos estudiando',earned:false},
+  {id:'speed_demon',emoji:'⚡',name:'Rápido',desc:'Respondiste sin que se agote el tiempo',earned:false},
+];
+
+// ===================== STATE =====================
+let state = JSON.parse(localStorage.getItem('finexam_v2') || JSON.stringify({
+  xp:0, streak:0, lastDate:null,
+  results:{}, badges:BADGES, history:[],
+}));
+if(!state.badges) state.badges=BADGES;
+if(!state.history) state.history=[];
+const save=()=>localStorage.setItem('finexam_v2',JSON.stringify(state));
+const today=()=>new Date().toISOString().split('T')[0];
+
+// ===================== EXAM STATE =====================
+let exam={subject:null,questions:[],current:0,answers:[],score:0,timer:null,timeLeft:0,totalTime:0,answered:false};
+
+// ===================== UTILS =====================
+const fmt=n=>n.toLocaleString('es-MX');
+function getLvl(){let l=0;for(let i=0;i<LEVELS.length;i++){if(state.xp>=LEVELS[i].xp)l=i;}return l;}
+function getLvlProg(){const l=getLvl();const c=LEVELS[l];const n=LEVELS[l+1];if(!n)return{pct:100,cur:state.xp,max:c.max};const pct=((state.xp-c.xp)/(n.xp-c.xp))*100;return{pct,cur:state.xp-c.xp,max:n.xp-c.xp};}
+function addXP(pts,lbl){state.xp+=pts;save();showXPPop(pts,lbl);}
+function showXPPop(pts,lbl){const el=document.getElementById('xpPop');el.innerHTML=`<div class="xp-pop-icon">⭐</div><div class="xp-pop-txt">${lbl}</div><div class="xp-pop-pts">+${pts} XP</div>`;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2200);}
+function unlockBadge(id){const b=state.badges.find(x=>x.id===id);if(b&&!b.earned){b.earned=true;save();setTimeout(()=>showToast('🏆 Logro: '+b.name),1500);}}
+function checkStreak(){const td=today();if(state.lastDate!==td){const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);const ys=yesterday.toISOString().split('T')[0];state.streak=state.lastDate===ys?(state.streak||0)+1:1;state.lastDate=td;save();}if(state.streak>=3)unlockBadge('streak_3');}
+function shuffleArr(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function updateXPUI(){const l=getLvl();const p=getLvlProg();const ld=LEVELS[l];document.getElementById('xpLevel').textContent=`Nivel ${l+1} — ${ld.name}`;document.getElementById('xpPts').textContent=`${state.xp} XP`;document.getElementById('xpFill').style.width=p.pct+'%';document.getElementById('xpNext').textContent=`${p.cur} / ${p.max} XP al siguiente nivel`;document.getElementById('xpStreak').textContent=`🔥 ${state.streak||0} días`;}
+
+// ===================== NAV =====================
+let activePage='home';
+function goTo(page,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+page)?.classList.add('active');document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));(btn||document.querySelector(`[data-page="${page}"]`))?.classList.add('active');activePage=page;document.getElementById('appContent').scrollTop=0;renderAll();}
+
+// ===================== HOME =====================
+function renderHome(){
+  checkStreak();updateXPUI();
+  const totalExams=state.history.length;
+  const avg=totalExams?Math.round(state.history.reduce((s,h)=>s+h.score,0)/totalExams):null;
+  const passed=SUBJECTS.filter(s=>state.results[s.id]?.passed).length;
+  document.getElementById('statExams').textContent=totalExams;
+  document.getElementById('statAvg').textContent=avg!==null?avg+'%':'—';
+  document.getElementById('statPassed').textContent=passed+'/'+SUBJECTS.length;
+  document.getElementById('statStreak').textContent=state.streak||0;
+  const el=document.getElementById('subjectsList');
+  el.innerHTML=SUBJECTS.map((s,i)=>{
+    const res=state.results[s.id];const locked=i>0&&!state.results[SUBJECTS[i-1].id]?.passed;
+    const attempts=res?.attempts||0;const best=res?.best||0;const passed=res?.passed;
+    return`<div class="subject-card ${locked?'locked':passed?'passed':res?'failed':''}" onclick="${locked?"showToast('🔒 Aprueba el tema anterior primero')":"startExam('"+s.id+"')"}">
+      <div class="sc-top">
+        <div class="sc-icon" style="background:${s.bg}">${s.icon}</div>
+        <div class="sc-info"><div class="sc-name">${s.name}</div><div class="sc-desc">${s.desc}</div></div>
+        <div class="sc-badge ${locked?'lock':passed?'pass':res?'fail':'ready'}">${locked?'🔒':passed?`✓ ${best}%`:res?`✗ ${best}%`:'Listo'}</div>
+      </div>
+      ${!locked?`<div class="sc-meta"><div class="sc-stats"><span>⏱ ${s.timePerQ}s/pregunta</span><span>10 preguntas</span><span>${s.passingScore}% para pasar</span></div></div>
+      <div class="sc-bar-wrap"><div class="sc-bar" style="width:${passed?100:res?(best/100*70):0}%;background:${passed?'var(--green)':res?'var(--red)':'var(--purple)'}"></div></div>
+      ${attempts>0?`<div style="font-size:10px;color:var(--muted);margin-top:4px;">${attempts} intento${attempts!==1?'s':''} · Mejor: ${best}%</div>`:''}`:''}</div>`;
+  }).join('');
+}
+
+// ===================== REVIEW PAGE =====================
+function renderReviewPage(){
+  const el=document.getElementById('reviewPageContent');
+  el.innerHTML=SUBJECTS.map(s=>`
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);">
+        <div style="width:36px;height:36px;background:${s.bg};border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;">${s.icon}</div>
+        <div><div style="font-size:14px;font-weight:800;">${s.name}</div></div>
+      </div>
+      <div style="padding:14px 0;font-size:13px;color:rgba(240,238,255,0.75);line-height:1.8;">${s.study}</div>
+      <button onclick="startExam('${s.id}')" style="width:100%;padding:11px;background:${s.bg};border:1px solid rgba(255,255,255,0.1);border-radius:10px;font-size:13px;font-weight:800;font-family:var(--font-b);color:var(--white);cursor:pointer;margin-bottom:20px;">Tomar examen →</button>
+    </div>`).join('');
+}
+
+// ===================== PROGRESS PAGE =====================
+function renderProgressPage(){
+  const l=getLvl();const p=getLvlProg();const ld=LEVELS[l];
+  document.getElementById('phLevel').textContent=l+1;
+  document.getElementById('phName').textContent=ld.name+' Financiero';
+  document.getElementById('phFill').style.width=p.pct+'%';
+  document.getElementById('phXP').textContent=`${p.cur} / ${p.max} XP`;
+  document.getElementById('badgesWrap').innerHTML=state.badges.map(b=>`<div class="badge-item ${b.earned?'earned':'locked-b'}"><div class="bi-emoji">${b.emoji}</div><div class="bi-name">${b.name}</div><div class="bi-desc">${b.desc}</div></div>`).join('');
+  const hist=document.getElementById('examHistory');
+  hist.innerHTML=state.history.length?[...state.history].reverse().slice(0,10).map(h=>{
+    const s=SUBJECTS.find(x=>x.id===h.subjectId);
+    return`<div style="display:flex;align-items:center;gap:12px;background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px;">
+      <div style="font-size:22px;">${s?.icon||'📋'}</div>
+      <div style="flex:1;"><div style="font-size:13px;font-weight:700;">${s?.name||h.subjectId}</div><div style="font-size:11px;color:var(--muted);">${new Date(h.date).toLocaleDateString('es-MX')}</div></div>
+      <div style="font-size:16px;font-weight:800;color:${h.passed?'var(--green)':'var(--red)'};">${h.score}%</div>
+    </div>`;}).join(''):'<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px;">Sin exámenes aún</div>';
+}
+
+// ===================== START EXAM =====================
+function startExam(subjectId){
+  const s=SUBJECTS.find(x=>x.id===subjectId);if(!s)return;
+  exam.subject=s;
+  exam.questions=shuffleArr([...s.questions]);
+  exam.current=0;exam.answers=[];exam.score=0;exam.answered=false;
+  document.getElementById('examSubjectName').textContent=s.name;
+  document.getElementById('examScreen').classList.add('open');
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q=exam.questions[exam.current];const total=exam.questions.length;
+  exam.answered=false;
+  const nextBtn=document.getElementById('examNextBtn');
+  nextBtn.textContent=exam.current<total-1?'Confirmar respuesta':'Terminar examen';
+  nextBtn.className='exam-next-btn';
+
+  // Progress dots
+  document.getElementById('examQNum').textContent=`Pregunta ${exam.current+1} de ${total}`;
+  document.getElementById('examScore').textContent=`✓ ${exam.score} | ✗ ${exam.current-exam.score} de ${exam.current}`;
+  const dots=document.getElementById('epDots');
+  dots.innerHTML=exam.questions.map((_,i)=>`<div class="ep-dot ${i<exam.current?(exam.answers[i]?.correct?'done-ed':'wrong-ed'):i===exam.current?'cur-ed':''}"></div>`).join('');
+
+  // Timer
+  clearInterval(exam.timer);
+  exam.timeLeft=exam.subject.timePerQ;exam.totalTime=exam.subject.timePerQ;
+  updateTimer();
+  exam.timer=setInterval(()=>{
+    exam.timeLeft--;
+    updateTimer();
+    if(exam.timeLeft<=0){clearInterval(exam.timer);if(!exam.answered)timeUp();}
+  },1000);
+
+  // Build question
+  const body=document.getElementById('questionBody');
+  const typeLabels={mc:'Opción múltiple',tf:'Verdadero o Falso',fill:'Completa el espacio',case:'Caso práctico'};
+  const typeIcons={mc:'📝',tf:'⚖️',fill:'✏️',case:'🔍'};
+  let html=`<div class="q-type-tag"><div class="q-type-icon" style="background:var(--purple-l)">${typeIcons[q.type]}</div>${typeLabels[q.type]}</div>
+    <div class="q-num">Pregunta ${exam.current+1} de ${total}</div>
+    <div class="q-text">${q.q}</div>`;
+
+  if(q.context&&!q.numbers)html+=`<div class="q-context">${q.context}</div>`;
+  if(q.numbers){html+=`<div class="case-context"><div class="case-label">📊 Datos del caso</div><div class="case-text">${q.context}</div><div class="case-numbers">${q.numbers.map(n=>`<div class="cn-item"><div class="cn-label">${n.l}</div><div class="cn-val">${n.v}</div></div>`).join('')}</div></div>`;}
+
+  if(q.type==='mc'){
+    const letters=['A','B','C','D'];
+    html+=`<div class="mc-options">${q.opts.map((o,i)=>`<div class="mc-opt" id="opt${i}" onclick="selectMC(${i})"><div class="mc-letter">${letters[i]}</div>${o}</div>`).join('')}</div>`;
+  }else if(q.type==='tf'){
+    html+=`<div class="tf-options"><div class="tf-opt" id="optTrue" onclick="selectTF(true)"><div class="tf-icon">✅</div>Verdadero</div><div class="tf-opt" id="optFalse" onclick="selectTF(false)"><div class="tf-icon">❌</div>Falso</div></div>`;
+  }else if(q.type==='fill'){
+    html+=`<div class="fill-wrap"><input class="fill-input" id="fillInput" placeholder="Escribe tu respuesta..." oninput="onFillInput()" onkeydown="if(event.key==='Enter')confirmFill()"><div class="fill-hint">💡 ${q.hint||'Escribe tu respuesta'}</div></div>`;
+  }else if(q.type==='case'){
+    const letters=['A','B','C','D'];
+    html+=`<div class="mc-options">${q.opts.map((o,i)=>`<div class="mc-opt" id="opt${i}" onclick="selectMC(${i})"><div class="mc-letter">${letters[i]}</div>${o}</div>`).join('')}</div>`;
+  }
+
+  html+=`<div class="q-feedback" id="qFeedback"></div>`;
+  body.innerHTML=html;
+  body.scrollTop=0;
+  if(q.type==='fill'){setTimeout(()=>document.getElementById('fillInput')?.focus(),300);}
+}
+
+function updateTimer(){
+  const pct=(exam.timeLeft/exam.totalTime)*100;
+  const fill=document.getElementById('timerFill');
+  const num=document.getElementById('timerNum');
+  num.textContent=exam.timeLeft;
+  fill.style.width=pct+'%';
+  fill.style.background=pct>50?'var(--green)':pct>25?'var(--amber)':'var(--red)';
+  num.style.color=pct>50?'var(--white)':pct>25?'var(--amber)':'var(--red)';
+}
+
+function timeUp(){
+  if(exam.answered)return;
+  exam.answered=true;
+  const q=exam.questions[exam.current];
+  exam.answers.push({correct:false,userAnswer:'—',correctAnswer:q.type==='tf'?q.correct:q.type==='fill'?q.answer:q.opts[q.correct]});
+  showFeedback(false,q.exp,'⏱ Se acabó el tiempo. '+q.exp);
+  document.getElementById('examNextBtn').className='exam-next-btn ready';
+  // Disable inputs
+  document.querySelectorAll('.mc-opt,.tf-opt').forEach(el=>{el.classList.add('disabled');});
+  if(q.type==='mc'||q.type==='case'){
+    const correct=document.getElementById('opt'+q.correct);if(correct)correct.classList.add('correct');
+  }else if(q.type==='tf'){
+    document.getElementById(q.correct?'optTrue':'optFalse')?.classList.add('correct');
+  }
+}
+
+function selectMC(idx){
+  if(exam.answered)return;
+  exam.answered=true;clearInterval(exam.timer);
+  const q=exam.questions[exam.current];
+  const correct=idx===q.correct;
+  document.querySelectorAll('.mc-opt').forEach((el,i)=>{
+    el.classList.add('disabled');
+    if(i===q.correct)el.classList.add('correct');
+    else if(i===idx&&!correct)el.classList.add('wrong');
+  });
+  recordAnswer(correct,q.opts[idx],q.opts[q.correct]);
+  showFeedback(correct,q.exp);
+  if(exam.timeLeft===exam.subject.timePerQ)unlockBadge('speed_demon');
+}
+
+function selectTF(val){
+  if(exam.answered)return;
+  exam.answered=true;clearInterval(exam.timer);
+  const q=exam.questions[exam.current];
+  const correct=val===q.correct;
+  ['optTrue','optFalse'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.classList.add('disabled');
+    if((id==='optTrue')===q.correct)el.classList.add('correct');
+    else if((id==='optTrue')===val&&!correct)el.classList.add('wrong');
+  });
+  recordAnswer(correct,val?'Verdadero':'Falso',q.correct?'Verdadero':'Falso');
+  showFeedback(correct,q.exp);
+}
+
+function onFillInput(){
+  const val=document.getElementById('fillInput')?.value.trim();
+  document.getElementById('examNextBtn').className='exam-next-btn'+(val?'  ready':'');
+}
+
+function confirmFill(){
+  if(exam.answered)return;
+  const input=document.getElementById('fillInput');
+  if(!input?.value.trim())return;
+  exam.answered=true;clearInterval(exam.timer);
+  const q=exam.questions[exam.current];
+  const userAns=input.value.trim().toLowerCase().replace(/[$,\s]/g,'');
+  const correctAns=q.answer.toLowerCase().replace(/[$,\s]/g,'');
+  const correct=userAns===correctAns||userAns.includes(correctAns)||correctAns.includes(userAns);
+  input.classList.add(correct?'correct':'wrong');
+  input.disabled=true;
+  if(!correct){
+    const hint=document.createElement('div');hint.style.cssText='font-size:13px;color:var(--green);text-align:center;margin-top:6px;font-weight:700;';hint.textContent='Respuesta correcta: '+q.answer;input.parentNode.appendChild(hint);
+  }
+  recordAnswer(correct,input.value,q.answer);
+  showFeedback(correct,q.exp);
+}
+
+document.getElementById('examNextBtn').addEventListener('click',()=>{
+  const q=exam.questions[exam.current];
+  if(!exam.answered){
+    if(q.type==='fill'){confirmFill();return;}
+    showToast('Selecciona una respuesta primero');return;
+  }
+  nextQuestion();
+});
+
+function recordAnswer(correct,user,correctAns){
+  if(correct){exam.score++;unlockBadge('speed_demon');}
+  exam.answers.push({correct,userAnswer:user,correctAnswer:correctAns});
+  document.getElementById('examScore').textContent=`✓ ${exam.score} | ✗ ${exam.answers.length-exam.score} de ${exam.answers.length}`;
+}
+
+function showFeedback(correct,exp,override){
+  const el=document.getElementById('qFeedback');
+  el.className='q-feedback show '+(correct?'correct':'wrong');
+  el.innerHTML=`<div class="qf-title">${correct?'✓ ¡Correcto!':'✗ Incorrecto'}</div><div class="qf-exp">${override||exp||''}</div>`;
+  document.getElementById('examNextBtn').className='exam-next-btn ready';
+}
+
+function nextQuestion(){
+  if(!exam.answered)return;
+  clearInterval(exam.timer);
+  if(exam.current<exam.questions.length-1){
+    exam.current++;renderQuestion();
+  }else{finishExam();}
+}
+
+function finishExam(){
+  clearInterval(exam.timer);
+  const total=exam.questions.length;
+  const score=Math.round((exam.score/total)*100);
+  const passed=score>=exam.subject.passingScore;
+  const s=exam.subject;
+  const prev=state.results[s.id]||{attempts:0,best:0,passed:false};
+  const newResult={attempts:prev.attempts+1,best:Math.max(prev.best,score),passed:prev.passed||passed};
+  state.results[s.id]=newResult;
+  state.history.push({subjectId:s.id,score,passed,date:new Date().toISOString(),correct:exam.score,total});
+  // XP
+  const xpEarned=passed?(score===100?200:100):30;
+  addXP(xpEarned,passed?'¡Examen aprobado!':'Sigue intentando');
+  save();
+  // Badges
+  if(state.history.length===1)unlockBadge('first_exam');
+  if(score===100)unlockBadge('perfect_score');
+  if(!prev.passed&&passed&&prev.attempts>0)unlockBadge('comeback');
+  if(SUBJECTS.every(sub=>state.results[sub.id]?.passed))unlockBadge('all_passed');
+  document.getElementById('examScreen').classList.remove('open');
+  showResults(score,passed,xpEarned);
+}
+
+function showResults(score,passed,xp){
+  const total=exam.questions.length;
+  document.getElementById('resultsScreen').classList.add('open');
+  document.getElementById('resEmoji').textContent=score===100?'🏆':passed?'🎉':score>=50?'😤':'📚';
+  document.getElementById('resGrade').textContent=score+'%';
+  document.getElementById('resGrade').className='results-grade '+(passed?'results-pass':'results-fail');
+  document.getElementById('resLabel').textContent=score===100?'¡Perfecto!':passed?'¡Aprobado!':score>=50?'Casi...':'A estudiar más';
+  document.getElementById('resSub').textContent=`${exam.score} de ${total} correctas · Mínimo: ${exam.subject.passingScore}%`;
+  document.getElementById('resPrimaryBtn').textContent=passed?'Tomar de nuevo':'Reintentar examen';
+
+  document.getElementById('resBreakdown').innerHTML=[
+    {icon:'✓',text:'Respuestas correctas',sub:`${exam.score} de ${total}`,val:exam.score,cls:'g'},
+    {icon:'✗',text:'Respuestas incorrectas',sub:`${total-exam.score} de ${total}`,val:total-exam.score,cls:'r'},
+    {icon:'⭐',text:'XP ganado',sub:'Por este examen',val:'+'+xp+' XP',cls:'p'},
+    {icon:'📊',text:'Calificación',sub:passed?'¡Tema aprobado!':'Necesitas '+exam.subject.passingScore+'%',val:score+'%',cls:passed?'g':'r'},
+  ].map(r=>`<div class="rb-item"><div class="rb-left"><div class="rb-icon">${r.icon}</div><div><div class="rb-text">${r.text}</div><div class="rb-sub">${r.sub}</div></div></div><div class="rb-val ${r.cls}">${r.val}</div></div>`).join('');
+
+  document.getElementById('resReview').innerHTML=exam.questions.map((q,i)=>{
+    const ans=exam.answers[i];const correct=ans?.correct;
+    const userStr=ans?.userAnswer?.toString()||'—';
+    const correctStr=q.type==='tf'?(q.correct?'Verdadero':'Falso'):q.type==='fill'?q.answer:q.opts?.[q.correct]||'—';
+    return`<div class="review-item"><div class="ri-top"><div class="ri-icon">${correct?'✅':'❌'}</div><div class="ri-q">${q.q}</div></div>
+      <div class="ri-answer ${correct?'correct':'wrong'}">Tu respuesta: ${userStr}</div>
+      ${!correct?`<div class="ri-answer correct">Correcta: ${correctStr}</div>`:''}
+      <div class="ri-exp">${q.exp||''}</div></div>`;
+  }).join('');
+}
+
+function retakeExam(){
+  const subjectId=exam.subject.id;
+  document.getElementById('resultsScreen').classList.remove('open');
+  startExam(subjectId);
+}
+
+function closeResults(){document.getElementById('resultsScreen').classList.remove('open');renderAll();}
+function confirmQuit(){if(confirm('¿Salir del examen? Tu progreso se perderá.')){clearInterval(exam.timer);document.getElementById('examScreen').classList.remove('open');}}
+
+// ===================== RENDER ALL =====================
+function renderAll(){
+  if(activePage==='home')renderHome();
+  if(activePage==='review')renderReviewPage();
+  if(activePage==='progress')renderProgressPage();
+  updateXPUI();
+}
+
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+
+// ===================== INIT =====================
+checkStreak();renderAll();
+</script>
+</body>
+</html>
